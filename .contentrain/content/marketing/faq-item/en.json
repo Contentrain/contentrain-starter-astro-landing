@@ -1,0 +1,10 @@
+{
+  "extend-to-editorial": {
+    "answer": "Yes. The shared content contracts are designed so editorial models can be added without restructuring the whole site.",
+    "question": "Can this evolve into docs or a blog?"
+  },
+  "why-astro": {
+    "answer": "It gives excellent performance, simple deployment, and clean rendering for content-heavy marketing sites.",
+    "question": "Why Astro for this starter?"
+  }
+}

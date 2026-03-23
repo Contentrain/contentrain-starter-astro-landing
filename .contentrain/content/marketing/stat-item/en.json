@@ -1,0 +1,17 @@
+{
+  "deploy-time": {
+    "detail": "Starter defaults in place",
+    "label": "deploy in",
+    "value": "<10 min"
+  },
+  "sections": {
+    "detail": "Reusable content blocks",
+    "label": "sections",
+    "value": "12+"
+  },
+  "shared-models": {
+    "detail": "Contentrain-first structure",
+    "label": "shared models",
+    "value": "8"
+  }
+}

@@ -1,0 +1,6 @@
+export default {
+  "default_locale": "en",
+  "site_name": "Signal Launch",
+  "site_tagline": "Launch a content-native product site that already knows how to scale.",
+  "theme_name": "signal_saas"
+}

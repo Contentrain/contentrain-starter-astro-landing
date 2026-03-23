@@ -1,0 +1,315 @@
+---
+import { singleton } from "../../.contentrain/client/index.mjs";
+import type { Footer } from "../../.contentrain/client/index.d.ts";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+const site = singleton("site-settings").locale("en").get();
+const seo = singleton("seo-defaults").locale("en").get();
+const footer = singleton("footer").locale("en").get();
+type FooterColumn = NonNullable<Footer["columns"]>[number];
+type FooterLink = NonNullable<FooterColumn["links"]>[number];
+const pageTitle = title ? `${title} | ${site.site_name}` : site.site_name;
+const pageDescription = description ?? seo.meta_description;
+---
+
+<!doctype html>
+<html lang="en" data-theme="signal-saas">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={pageDescription} />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <slot />
+    <footer class="site-footer">
+      <main>
+        <div class="footer-top">
+          <div>
+            <div class="brand">{site.site_name}</div>
+            <p class="footer-copy">{footer.blurb}</p>
+          </div>
+          <div class="footer-columns">
+            {
+              footer.columns?.map((column: FooterColumn) => (
+                <section class="footer-column">
+                  <h2>{column.title}</h2>
+                  <div class="footer-links">
+                    {column.links?.map((link: FooterLink) => <a href={link.href}>{link.label}</a>)}
+                  </div>
+                </section>
+              ))
+            }
+          </div>
+        </div>
+        <div class="footer-legal">{footer.legal_notice}</div>
+      </main>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  @import "../styles/tokens.css";
+
+  :root {
+    --landing-width: min(74rem, calc(100vw - 2rem));
+  }
+
+  html {
+    background:
+      radial-gradient(circle at 15% 20%, rgba(217, 240, 107, 0.32), transparent 22%),
+      radial-gradient(circle at 85% 0%, rgba(15, 123, 82, 0.14), transparent 24%),
+      var(--ct-color-bg);
+    color: var(--ct-color-text);
+    font-family: "Inter", "Helvetica Neue", sans-serif;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  main {
+    width: var(--landing-width);
+    margin: 0 auto;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 0;
+  }
+
+  .brand {
+    font-family: "Space Grotesk", "Avenir Next", sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    font-size: 1.1rem;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .pill,
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    font-size: 0.92rem;
+    transition: transform var(--ct-duration-base) var(--ct-easing-standard);
+  }
+
+  .pill {
+    padding: 0.65rem 1rem;
+    border: 1px solid var(--ct-color-border);
+    background: rgba(255, 255, 255, 0.66);
+    color: var(--ct-color-muted);
+  }
+
+  .button {
+    padding: 0.85rem 1.2rem;
+    background: var(--ct-color-text);
+    color: white;
+    box-shadow: var(--ct-shadow-card);
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 2rem;
+    padding: 5rem 0 4rem;
+    align-items: start;
+  }
+
+  .hero-copy h1 {
+    margin: 0;
+    max-width: 11ch;
+    font-family: "Space Grotesk", "Avenir Next", sans-serif;
+    font-size: clamp(3.2rem, 7vw, 5.8rem);
+    line-height: 0.92;
+    letter-spacing: -0.08em;
+  }
+
+  .eyebrow {
+    margin-bottom: 1rem;
+    color: var(--ct-color-primary);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .hero-copy p {
+    max-width: 36rem;
+    color: var(--ct-color-muted);
+    font-size: 1.1rem;
+    line-height: 1.8;
+  }
+
+  .hero-card,
+  .feature-card,
+  .quote-card,
+  .faq-card {
+    border: 1px solid var(--ct-color-border);
+    border-radius: 1.8rem;
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: var(--ct-shadow-soft);
+  }
+
+  .hero-card {
+    padding: 1.25rem;
+  }
+
+  .hero-media {
+    width: 100%;
+    display: block;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: 1.3rem;
+    margin-bottom: 1rem;
+  }
+
+  .grid-3,
+  .grid-2 {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .grid-3 {
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  }
+
+  .grid-2 {
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  }
+
+  section {
+    padding: 2rem 0 0;
+  }
+
+  .feature-card,
+  .quote-card,
+  .faq-card {
+    padding: 1.4rem;
+  }
+
+  .testimonial-head,
+  .chip-list {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .testimonial-head {
+    margin-bottom: 1rem;
+  }
+
+  .avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 999px;
+    object-fit: cover;
+  }
+
+  .field-chip {
+    display: inline-flex;
+    padding: 0.4rem 0.75rem;
+    border-radius: 999px;
+    background: rgba(15, 123, 82, 0.12);
+    color: var(--ct-color-primary);
+    font-size: 0.82rem;
+  }
+
+  .stat {
+    padding: 1rem 0;
+    border-top: 1px solid var(--ct-color-border);
+    display: flex;
+    justify-content: space-between;
+    color: var(--ct-color-muted);
+  }
+
+  .stat strong {
+    font-size: 1.75rem;
+    color: var(--ct-color-text);
+  }
+
+  .section-title {
+    max-width: 30rem;
+    margin-bottom: 1rem;
+    font-family: "Space Grotesk", "Avenir Next", sans-serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    letter-spacing: -0.05em;
+  }
+
+  footer {
+    padding: 4rem 0 2rem;
+    color: var(--ct-color-muted);
+    font-size: 0.92rem;
+  }
+
+  .site-footer {
+    border-top: 1px solid var(--ct-color-border);
+    margin-top: 2rem;
+    background: rgba(255, 255, 255, 0.58);
+  }
+
+  .footer-top,
+  .footer-columns,
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .footer-top {
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-top: 2.5rem;
+  }
+
+  .footer-copy {
+    max-width: 32rem;
+    line-height: 1.8;
+  }
+
+  .footer-column h2 {
+    margin: 0 0 0.8rem;
+    font-size: 0.84rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .footer-links {
+    flex-direction: column;
+  }
+
+  .footer-legal {
+    padding: 1.25rem 0 2rem;
+  }
+
+  @media (max-width: 840px) {
+    .hero {
+      grid-template-columns: 1fr;
+    }
+
+    .site-header,
+    .footer-top,
+    .footer-columns {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

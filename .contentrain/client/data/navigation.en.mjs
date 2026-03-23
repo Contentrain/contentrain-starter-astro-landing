@@ -1,0 +1,18 @@
+export default {
+  "cta_href": "#faq",
+  "cta_label": "Deploy This",
+  "items": [
+    {
+      "href": "#features",
+      "label": "Features"
+    },
+    {
+      "href": "/blueprint",
+      "label": "Blueprint"
+    },
+    {
+      "href": "https://docs.contentrain.io/",
+      "label": "Docs"
+    }
+  ]
+}

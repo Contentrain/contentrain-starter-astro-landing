@@ -1,0 +1,170 @@
+---
+import { access, readFile, readdir } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { query, singleton } from "../../.contentrain/client/index.mjs";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+type ModelField = {
+  type?: string;
+};
+
+type ModelSchema = {
+  id: string;
+  kind: string;
+  domain: string;
+  fields?: Record<string, ModelField>;
+};
+
+type DomainGroup = {
+  domain: string;
+  models: ModelSchema[];
+};
+
+const site = singleton("site-settings").locale("en").get();
+const hero = singleton("hero").locale("en").get();
+const features = query("feature").locale("en").all();
+const faqs = query("faq-item").locale("en").all();
+const currentDir = path.dirname(fileURLToPath(import.meta.url));
+async function resolveStarterRoot() {
+  const candidates = [
+    path.resolve(currentDir, "../.."),
+    path.resolve(currentDir, "../../.."),
+    process.cwd(),
+    path.resolve(process.cwd(), ".."),
+  ];
+
+  for (const candidate of candidates) {
+    try {
+      await access(path.join(candidate, "contentrain.starter.json"));
+      return candidate;
+    } catch {}
+  }
+
+  throw new Error("Unable to resolve starter root for blueprint page.");
+}
+
+const rootDir = await resolveStarterRoot();
+const starterConfig = JSON.parse(
+  await readFile(path.join(rootDir, "contentrain.starter.json"), "utf8"),
+);
+const modelDir = path.join(rootDir, ".contentrain", "models");
+const modelFiles = (await readdir(modelDir)).sort();
+const models = await Promise.all(
+  modelFiles.map(async (file) =>
+    JSON.parse(await readFile(path.join(modelDir, file), "utf8")) as ModelSchema,
+  ),
+);
+const domainGroups: DomainGroup[] = starterConfig.domains.map((domain: string) => ({
+  domain,
+  models: models.filter((model) => model.domain === domain),
+}));
+---
+
+<BaseLayout title="Blueprint" description="Starter blueprint for sections, content contracts, and Contentrain integration.">
+  <main>
+    <header class="site-header">
+      <a href="/" class="brand">{site.site_name}</a>
+      <div class="header-actions">
+        <a class="pill" href="/">Home</a>
+        <a class="pill" href="https://docs.contentrain.io/">Docs</a>
+        <a class="button" href="https://studio.contentrain.io/">Open Studio</a>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">Starter blueprint</div>
+        <h1>{hero.title}</h1>
+        <p>
+          This internal page turns the landing starter into something you can actually inspect:
+          section pacing, content contracts, internal routes, and official Contentrain entry points
+          are all visible in one place.
+        </p>
+      </div>
+
+      <aside class="hero-card">
+        {hero.hero_media ? <img src={hero.hero_media} alt={hero.title} class="hero-media" /> : null}
+        <div class="eyebrow">Official surfaces</div>
+        <div class="stat">
+          <span>SDK</span>
+          <a href="https://ai.contentrain.io/packages/sdk.html">ai.contentrain.io</a>
+        </div>
+        <div class="stat">
+          <span>Docs</span>
+          <a href="https://docs.contentrain.io/">docs.contentrain.io</a>
+        </div>
+        <div class="stat">
+          <span>Studio</span>
+          <a href="https://studio.contentrain.io/">studio.contentrain.io</a>
+        </div>
+      </aside>
+    </section>
+
+    <section>
+      <h2 class="section-title">Section system</h2>
+      <div class="grid-3">
+        {features.map((feature) => (
+          <article class="feature-card">
+            <h3>{feature.title}</h3>
+            <p>{feature.summary}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Actual schema architecture</h2>
+      <div class="grid-2">
+        {domainGroups.map((group: DomainGroup) => (
+          <article class="faq-card">
+            <h3 style="text-transform: capitalize;">{group.domain}</h3>
+            <p>{group.models.length} Contentrain models in this domain.</p>
+            <div class="chip-list">
+              {group.models.map((model: ModelSchema) => (
+                <span class="field-chip">
+                  {model.id} ({model.kind})
+                </span>
+              ))}
+            </div>
+            <div class="chip-list" style="margin-top: 1rem;">
+              {group.models.flatMap((model: ModelSchema) =>
+                (Object.entries(model.fields ?? {}) as [string, ModelField][]).map(([fieldName, definition]) => (
+                  <span class="field-chip">
+                    {fieldName}: {definition.type ?? "unknown"}
+                  </span>
+                )),
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Why this is no longer a one-page demo</h2>
+      <div class="grid-2">
+        <article class="faq-card">
+          <h3>Internal route</h3>
+          <p>The blueprint page gives the starter a real second destination instead of only hash links.</p>
+        </article>
+        <article class="faq-card">
+          <h3>Contentrain-first navigation</h3>
+          <p>Header and footer links now point to both internal pages and official Contentrain surfaces.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Starter FAQ</h2>
+      <div class="grid-2">
+        {faqs.map((item) => (
+          <article class="faq-card">
+            <h3>{item.question}</h3>
+            <p>{item.answer}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  </main>
+</BaseLayout>

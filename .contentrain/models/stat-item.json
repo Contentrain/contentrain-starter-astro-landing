@@ -1,0 +1,19 @@
+{
+  "domain": "marketing",
+  "fields": {
+    "detail": {
+      "type": "string"
+    },
+    "label": {
+      "required": true,
+      "type": "string"
+    },
+    "value": {
+      "required": true,
+      "type": "string"
+    }
+  },
+  "i18n": true,
+  "id": "stat-item",
+  "kind": "collection"
+}
