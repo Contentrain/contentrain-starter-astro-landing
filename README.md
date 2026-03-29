@@ -4,6 +4,10 @@
 
 Narrative marketing starter for launches, brand sites, and product storytelling.
 
+![Contentrain Astro Landing cover](./media/cover.png)
+
+![Contentrain Astro Landing preview](./media/preview.gif)
+
 ## Contentrain Ecosystem
 
 - SDK and CLI: [ai.contentrain.io/packages/sdk.html](https://ai.contentrain.io/packages/sdk.html)
