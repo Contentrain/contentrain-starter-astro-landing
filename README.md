@@ -10,7 +10,8 @@ Narrative marketing starter for launches, brand sites, and product storytelling.
 
 ## Contentrain Ecosystem
 
-- SDK and CLI: [ai.contentrain.io/packages/sdk.html](https://ai.contentrain.io/packages/sdk.html)
+- SDK and CLI: [ai.contentrain.io/packages/sdk](https://ai.contentrain.io/packages/sdk)
+- Astro guide: [ai.contentrain.io/guides/frameworks#astro](https://ai.contentrain.io/guides/frameworks#astro)
 - Product guides: [docs.contentrain.io](https://docs.contentrain.io/)
 - Content operations UI: [studio.contentrain.io](https://studio.contentrain.io)
 
@@ -42,6 +43,8 @@ pnpm dev
 - Seed content is committed so the starter is ready immediately after clone
 - The starter includes a second internal route at `/blueprint` so it is not limited to a single-page hash demo
 - The structure mirrors Contentrain’s content-first architecture: models, content, and runtime queries stay aligned inside the repo
+- After editing `.contentrain/`, run `pnpm contentrain:generate` to refresh the client
+- Prefer Astro content collections? `@contentrain/query/astro` provides `contentrainLoader()`; see the Astro guide
 
 ## Deploy
 
