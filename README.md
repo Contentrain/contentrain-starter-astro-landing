@@ -1,7 +1,5 @@
 <p align="center"><img src=".github/cover.png" alt="Contentrain Astro landing starter — every word in Git" width="100%"></p>
 
-> Source of truth: this starter is exported from the `contentrain-starters` monorepo.
-> Internal starter id: `astro-landing`.
 # Contentrain Astro Landing
 
 Narrative marketing starter for launches, brand sites, and product storytelling.
