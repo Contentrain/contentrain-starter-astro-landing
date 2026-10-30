@@ -15,5 +15,6 @@
   },
   "i18n": true,
   "id": "stat-item",
-  "kind": "collection"
+  "kind": "collection",
+  "title_field": "label"
 }

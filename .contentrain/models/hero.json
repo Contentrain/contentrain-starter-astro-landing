@@ -29,5 +29,6 @@
   },
   "i18n": true,
   "id": "hero",
-  "kind": "singleton"
+  "kind": "singleton",
+  "title_field": "title"
 }

@@ -15,5 +15,6 @@
   },
   "i18n": true,
   "id": "faq-item",
-  "kind": "collection"
+  "kind": "collection",
+  "title_field": "question"
 }

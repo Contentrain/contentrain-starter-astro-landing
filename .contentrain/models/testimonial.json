@@ -24,5 +24,6 @@
   },
   "i18n": true,
   "id": "testimonial",
-  "kind": "collection"
+  "kind": "collection",
+  "title_field": "person_name"
 }
