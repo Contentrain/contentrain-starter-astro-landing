@@ -1,12 +1,12 @@
 {
   "ayla-demir": {
     "source": "import",
-    "status": "draft",
+    "status": "published",
     "updated_by": "contentrain-starters"
   },
   "rafael-costa": {
     "source": "import",
-    "status": "draft",
+    "status": "published",
     "updated_by": "contentrain-starters"
   }
 }
